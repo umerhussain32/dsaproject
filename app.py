@@ -39,7 +39,7 @@ ensure_cpp_compiled()
 def get_pollinations_image_url(prompt: str, width: int = 1024, height: int = 1024) -> str:
     # URL-encode the user prompt to make it safe for the browser request
     encoded_prompt = urllib.parse.quote(prompt)
-    return f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+    return f"https://image.pollinations.ai/prompt/{encoded_prompt}"
 
 # --- Session State ---
 if "pending_prompts" not in st.session_state:
