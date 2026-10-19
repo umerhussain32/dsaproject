@@ -90,7 +90,7 @@ if submit and user_prompt:
     st.session_state.pending_timer_prompt = user_prompt
     st.rerun()
 
-# --- Hidden Backend Timer (2.5 Seconds) ---
+# --- Hidden Backend Timer (4.5 Seconds) ---
 if st.session_state.pending_timer_prompt:
     active_prompt = st.session_state.pending_timer_prompt
     
