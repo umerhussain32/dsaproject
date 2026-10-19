@@ -78,8 +78,7 @@ if "my_last_image" not in st.session_state:
 if "my_last_prompt" not in st.session_state:
     st.session_state.my_last_prompt = None
 
-st.title("🎨 C++ Queue Generator with Hidden Timer")
-st.write("Prompts wait on a 2.5s hidden backend timer before entering the C++ multi-user queue.")
+
 
 # --- User Input Form ---
 with st.form(key="prompt_input_form"):
