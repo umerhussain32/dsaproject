@@ -51,7 +51,7 @@ global_queue = global_system["global_queue"]
 processing_lock = global_system["processing_lock"]
 
 # --- Groq API Helper Function ---
-def refine_prompt_with_groq(user_prompt: str, api_key: str, model_name: str = "llama-3.3-70b-versatile") -> str:
+def refine_prompt_with_groq(user_prompt: str, api_key: str, model_name: str = "openai/gpt-oss-20b") -> str:
     """
     Sends user prompt to Groq API with max_tokens set to 1000.
     """
@@ -117,7 +117,7 @@ groq_api_key = st.sidebar.text_input("Enter Groq API Key:", type="password")
 # Selected Model Name Option
 selected_model = st.sidebar.selectbox(
     "Select Groq Model:",
-    options=["llama-3.3-70b-versatile", "llama3-8b-8192", "mixtral-8x7b-32768"],
+    options=["openai/gpt-oss-20b", "llama3-8b-8192", "mixtral-8x7b-32768"],
     help="Select the Groq model endpoint to refine and generate image prompts."
 )
 
