@@ -52,7 +52,7 @@ processing_lock = global_system["processing_lock"]
 # --- Pollinations.ai API URL Generator ---
 def get_pollinations_image_url(prompt: str, width: int = 1024, height: int = 1024) -> str:
     encoded_prompt = urllib.parse.quote(prompt)
-    return f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&nologo=true"
+    return f"https://image.pollinations.ai/prompt/{encoded_prompt}?width={width}&height={height}&safe=true"
 
 # --- Execute C++ Executable ---
 def process_prompt_with_cpp(prompt: str) -> str:
