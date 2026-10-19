@@ -37,6 +37,17 @@ def ensure_cpp_compiled():
 
 ensure_cpp_compiled()
 
+# --- Retrieve Groq API Key from Streamlit Secrets ---
+def get_groq_api_key():
+    if "GROQ_API_KEY" in st.secrets:
+        return st.secrets["GROQ_API_KEY"]
+    else:
+        st.error("🔑 `GROQ_API_KEY` not found in Streamlit Secrets! Please configure `.streamlit/secrets.toml` or Streamlit Cloud Secrets.")
+        st.stop()
+
+# Load API key automatically
+groq_api_key = get_groq_api_key()
+
 # --- Shared Global Memory across all connected devices ---
 @st.cache_resource
 def get_global_queue_system():
@@ -77,11 +88,9 @@ if "last_response" not in st.session_state:
 st.title("⚡ Streaming Text Generator (`openai/gpt-oss-20b`)")
 st.write("Prompts are managed globally via **C++ `std::queue`** and processed using **Groq API** with streaming text output limited to **1000 tokens**.")
 
-# Groq API Key Input
-groq_api_key = st.sidebar.text_input("Enter Groq API Key:", type="password")
-
-# Fixed model selection
+# Sidebar status
 MODEL_NAME = "openai/gpt-oss-20b"
+st.sidebar.success("🔒 API Key loaded securely from Secrets")
 st.sidebar.info(f"**Model:** `{MODEL_NAME}`\n\n**Max Token Limit:** `1000 tokens`")
 
 # Input Form
@@ -90,11 +99,8 @@ with st.form(key="prompt_input_form"):
     submit = st.form_submit_button("Submit Prompt")
 
 if submit and user_prompt:
-    if not groq_api_key:
-        st.error("Please enter a valid Groq API Key in the sidebar!")
-    else:
-        st.session_state.pending_timer_prompt = user_prompt
-        st.rerun()
+    st.session_state.pending_timer_prompt = user_prompt
+    st.rerun()
 
 # --- Hidden Backend Timer (2.5 Seconds) ---
 if st.session_state.pending_timer_prompt:
@@ -105,7 +111,7 @@ if st.session_state.pending_timer_prompt:
     
     # Send prompt to the shared C++ queue
     global_queue.put(active_prompt)
-    st.toast(f"🚀 Sent to C++ queue!")
+    st.toast("🚀 Sent to C++ queue!")
     
     st.session_state.pending_timer_prompt = None
     st.rerun()
@@ -133,7 +139,7 @@ if not global_queue.empty():
                 
                 status_placeholder.write(f"⚡ Streaming response from `{MODEL_NAME}`...")
                 
-                # 2. Setup Groq Client with Streaming
+                # 2. Setup Groq Client with Secret Key and Streaming
                 client = Groq(api_key=groq_api_key)
                 
                 response_stream = client.chat.completions.create(
